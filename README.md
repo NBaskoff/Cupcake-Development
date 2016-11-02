@@ -1,5 +1,5 @@
 # Cupcake-Development
 
-Инструкция по установке:
-npm install -g bower
-bower init
+Инструкция по установке:<br>
+npm install -g bower<br>
+bower init<br>
