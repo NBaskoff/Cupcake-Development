@@ -9,6 +9,7 @@ jQuery(document).ready(function () {
     jQuery.getJSON("/catalog.json", function (data) {
         jQuery.each(data, function (item) {
             catalogData[data[item].id] = data[item];
+            catalogData[data[item].id].count = 1;
         });
 
         //Модель каталога
@@ -17,23 +18,16 @@ jQuery(document).ready(function () {
             data: {
                 catalog: catalogData,
                 show: true,
-                dialog: {
-                    title: "",
-                    image: ""
-                }
+                dialog: {title: "",image: ""}
             },
             methods: {
-                addCard: function (item, event) {
-                    var count = jQuery(event.target).parent().find("input").val();
-                    basket[item] = count;
+                addCard: function (item) {
+                    basket[item.id] = item.count;
                     store.set('basket', basket);
-                    basketBox.items[item] = catalogData[item];
+                    basketBox.items[item.id] = item;
                     menuTop.count = Object.keys(basket).length;
-                    basketBox.showSend = true;
-                    basketBox.items[item].count = count;
                 },
                 showInfo: function (item) {
-                    var item = this.catalog[item];
                     this.dialog.title = item.title;
                     this.dialog.image = item.url;
                     $('#catalogInfo').modal('show');
@@ -46,20 +40,13 @@ jQuery(document).ready(function () {
         jQuery.each(basket, function (item, key) {
             basketData[item] = catalogData[item];
         });
-        
-        if (Object.keys(basket).length > 0) {
-            var showSend = true;
-        } else {
-            var showSend = false;
-        }
-        
+       
         //модель корзины
         basketBox = new Vue({
             el: '#basketBox',
             data: {
                 items: basketData,
                 show: false,
-                showSend: showSend
             },
             methods: {
                 sendCard: function (item) {
@@ -67,7 +54,6 @@ jQuery(document).ready(function () {
                     basket = new Object();
                     store.set('basket', basket);
                     this.items = basket;
-                    this.showSend = false;
                     menuTop.count = Object.keys(basket).length;
                 }
             }

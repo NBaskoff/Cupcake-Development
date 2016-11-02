@@ -42,7 +42,7 @@
                 </div>
             </nav>
         </div>
-        <div class="container" id="catalogBox" v-if="show">
+        <div class="container" id="catalogBox" v-show="show">
             <div class="modal fade" tabindex="-1" role="dialog" id="catalogInfo">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -70,18 +70,18 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <!--<div class="input-group-addon">-</div>-->
-                                <input type="number" min="1" class="form-control" value="1" >
+                                <input v-model="item.count" type="number" min="1" class="form-control">
                                 <!--<div class="input-group-addon">+</div>-->
                             </div>
                         </div>
-                        <div v-on:click="addCard(item.id, $event)" class="btn btn-primary">Добавить в корзину</div>
-                        <div v-on:click="showInfo(item.id)" class="btn btn-default">Подробнее</div>
+                        <div v-on:click="addCard(item)" class="btn btn-primary">Добавить в корзину</div>
+                        <div v-on:click="showInfo(item)" class="btn btn-default">Подробнее</div>
                     </form>
 
                 </div>
             </div>
         </div>
-        <div class="container" id="basketBox" v-if="show">
+        <div class="container" id="basketBox" v-show="show">
             <div class="modal fade" tabindex="-1" role="dialog" id="basketInfo">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -108,8 +108,8 @@
                     <p>Кол-во: {{item.count}}</p>
                 </div>
             </div>
-            <div class="media" v-if="showSend">
-            <div v-on:click="sendCard" class="btn btn-primary">Отправить заказ</div>
+            <div class="media" v-show="Object.keys(items).length">
+                <div v-on:click="sendCard" class="btn btn-primary">Отправить заказ</div>
             </div>
         </div>
         <footer class="footer">
