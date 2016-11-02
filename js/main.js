@@ -1,24 +1,43 @@
 var catalogBox;
 var basketBox;
-var basket = store.get('basket');
-if (basket == undefined) {
-    basket = new Object();
-}
+var basket = store.get('basket', []);
 var catalogData = new Object();
-jQuery(document).ready(function () {
-    jQuery.getJSON("/catalog.json", function (data) {
-        jQuery.each(data, function (item) {
-            catalogData[data[item].id] = data[item];
-            catalogData[data[item].id].count = 1;
-        });
 
+window.onload = function () {
+    //Моделька главного меню
+    var menuTop = new Vue({
+        el: '#menuTop',
+        data: {
+            count: Object.keys(basket).length
+        },
+        methods: {
+            showCatalog: function () {
+                catalogBox.show = true;
+                basketBox.show = false;
+            },
+            showBasket: function () {
+                catalogBox.show = false;
+                basketBox.show = true;
+            },
+        }
+    });
+
+    var xhr = new XMLHttpRequest();
+    var self = this;
+    xhr.open('GET', "/catalog.json");
+    xhr.onload = function () {
+        data = JSON.parse(xhr.responseText);
+        data.forEach(function (item, i, data) {
+            catalogData[item.id] = item;
+            catalogData[item.id].count = 1;
+        });
         //Модель каталога
         catalogBox = new Vue({
             el: '#catalogBox',
             data: {
                 catalog: catalogData,
                 show: true,
-                dialog: {title: "",image: ""}
+                dialog: {title: "", image: ""}
             },
             methods: {
                 addCard: function (item) {
@@ -40,7 +59,7 @@ jQuery(document).ready(function () {
         jQuery.each(basket, function (item, key) {
             basketData[item] = catalogData[item];
         });
-       
+
         //модель корзины
         basketBox = new Vue({
             el: '#basketBox',
@@ -58,22 +77,7 @@ jQuery(document).ready(function () {
                 }
             }
         });
-    });
-    //Моделька главного меню
-    var menuTop = new Vue({
-        el: '#menuTop',
-        data: {
-            count: Object.keys(basket).length
-        },
-        methods: {
-            showCatalog: function () {
-                catalogBox.show = true;
-                basketBox.show = false;
-            },
-            showBasket: function () {
-                catalogBox.show = false;
-                basketBox.show = true;
-            },
-        }
-    });
-});
+    };
+    xhr.send();
+
+}
