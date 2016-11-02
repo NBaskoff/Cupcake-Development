@@ -49,7 +49,7 @@ jQuery(document).ready(function () {
                 show: false,
             },
             methods: {
-                sendCard: function (item) {
+                sendCard: function () {
                     $('#basketInfo').modal('show');
                     basket = new Object();
                     store.set('basket', basket);
@@ -76,6 +76,4 @@ jQuery(document).ready(function () {
             },
         }
     });
-
-
 });
