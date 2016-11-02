@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Тестовое задание</title>
+        <meta name="keywords" content="" />
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="/css/styles.css" rel="stylesheet">
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/store+json2.min.js"></script>
+        <script src="/js/vue.min.js"></script>
+        <script src="/js/main.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-default"><!-- navbar-fixed-top -->
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menuTop" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Тестовое задание</a>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="menuTop">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" v-on:click="showCatalog">Каталог</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#" v-on:click="showBasket">Корзина <span class="badge">{{ count }}</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="container" id="catalogBox" v-if="show">
+            <div class="modal fade" tabindex="-1" role="dialog" id="catalogInfo">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">{{ dialog.title }}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img v-bind:src="dialog.image" v-bind:title="dialog.title" width="100%">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="page-header">Каталог</h1>
+            <div class="media" v-for="item in catalog">
+                <div class="media-left">
+                    <img class="media-object" v-bind:src="item.thumbnailUrl" v-bind:title="item.title">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{item.title}}</h4>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <!--<div class="input-group-addon">-</div>-->
+                                <input type="number" min="1" class="form-control" value="1" >
+                                <!--<div class="input-group-addon">+</div>-->
+                            </div>
+                        </div>
+                        <div v-on:click="addCard(item.id, $event)" class="btn btn-primary">Добавить в корзину</div>
+                        <div v-on:click="showInfo(item.id)" class="btn btn-default">Подробнее</div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="container" id="basketBox" v-if="show">
+            <div class="modal fade" tabindex="-1" role="dialog" id="basketInfo">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Информация о заказе</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Заказ отправлен</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="page-header">Корзина</h1>
+            <div class="media" v-for="item in items">
+                <div class="media-left">
+                    <img class="media-object" v-bind:src="item.thumbnailUrl" v-bind:title="item.title">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{item.title}}</h4>
+                    <p>Кол-во: {{item.count}}</p>
+                </div>
+            </div>
+            <div class="media" v-if="showSend">
+            <div v-on:click="sendCard" class="btn btn-primary">Отправить заказ</div>
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted">Николай Басков</p>
+            </div>
+        </footer>
+    </body>
+</html>
