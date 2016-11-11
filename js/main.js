@@ -40,10 +40,13 @@ xhr.onload = function () {
         },
         methods: {
             addCard: function (item) {
-                basket[item.id] = item.count;
-                store.set('basket', basket);
-                basketBox.items[item.id] = item;
-                menuTop.count = Object.keys(basket).length;
+                var count = parseInt(item.count);
+                if (count > 0) {
+                    basket[item.id] = item.count;
+                    store.set('basket', basket);
+                    basketBox.items[item.id] = item;
+                    menuTop.count = Object.keys(basket).length;                    
+                }
             },
             showInfo: function (item) {
                 this.dialog.title = item.title;
@@ -56,7 +59,12 @@ xhr.onload = function () {
     //Сфомируем данные для коризны
     basketData = new Object();
     for (item in basket) {
-        basketData[item] = catalogData[item];
+        if (catalogData[item] != undefined) {
+            catalogData[item].count = basket[item];
+            basketData[item] = catalogData[item];
+        } else {
+            delete basket[item];
+        }
     }
 
     //модель корзины
